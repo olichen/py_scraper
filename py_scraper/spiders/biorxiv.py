@@ -6,7 +6,7 @@ class BiorxivSpider(scrapy.Spider):
     name = 'biorxiv'
 
     def start_requests(self):
-        url = 'https://www.biorxiv.org/search/genewiz/'
+        url = 'https://www.biorxiv.org/search/'
         search = getattr(self, 'search', None)
         if search:
             url = url + search
