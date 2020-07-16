@@ -13,7 +13,7 @@ with open(input_file) as jfile:
     data = json.load(jfile)
     with open(output_file, 'w') as outfile:
         for paper in data:
-            title = f'"{paper["title"]}","{paper["url"]}"'
+            title = f'"{paper["title"]}","{paper["url"]}","{paper["date"]}"'
             for key, value in paper.items():
 
                 def listToString(l):

@@ -24,8 +24,9 @@ class BiorxivSpider(scrapy.Spider):
     def parse_paper(self, response):
         authors = response.xpath("//div[contains(concat(' ', @class, ' '), ' author-tooltip-name ')]/..")
         output = {
-            'title': response.css('#page-title::text').get().strip(),
+            'title': response.xpath("//meta[@name='DC.Title']/@content").get().strip(),
             'url': response.request.url,
+            'date': response.xpath("//meta[@name='DC.Date']/@content").get().strip(),
         }
 
         for i, author in enumerate(authors, 1):
