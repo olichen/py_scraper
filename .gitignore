@@ -1,5 +1,9 @@
 ### OUTPUT
 *.json
+*.csv
+
+### OSX
+.DS_Store
 
 ### VIM
 # Swap
