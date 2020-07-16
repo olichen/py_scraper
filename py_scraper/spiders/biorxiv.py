@@ -22,13 +22,13 @@ class BiorxivSpider(scrapy.Spider):
         yield from response.follow_all(next_page_link, self.parse)
 
     def parse_paper(self, response):
-        authors = response.xpath("//div[contains(concat(' ', @class, ' '), ' author-tooltip-name ')]/..")
         output = {
             'title': response.xpath("//meta[@name='DC.Title']/@content").get().strip(),
-            'url': response.request.url,
             'date': response.xpath("//meta[@name='DC.Date']/@content").get().strip(),
+            'url': response.request.url,
         }
 
+        authors = response.xpath("//div[contains(concat(' ', @class, ' '), ' author-tooltip-name ')]/..")
         for i, author in enumerate(authors, 1):
             def extract(query):
                 output = author.css(query).getall()
