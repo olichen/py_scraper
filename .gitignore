@@ -1,6 +1,5 @@
 ### OUTPUT
-*.json
-*.csv
+output/
 
 ### OSX
 .DS_Store
