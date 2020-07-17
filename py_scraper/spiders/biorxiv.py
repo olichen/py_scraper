@@ -29,7 +29,7 @@ class BiorxivSpider(scrapy.Spider):
         output = {
             'title': extractmeta('DC.Title'),
             'date': extractmeta('DC.Date'),
-            'email': extractmeta('DC.Email'),
+            'email': extractmeta('citation_author_email'),
             'url': response.request.url,
         }
 

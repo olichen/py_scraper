@@ -18,10 +18,10 @@ with open(input_file) as infile, open(output_file, 'w') as outfile:
 
     for paper in data:
         title = (
-            f'"{listToString(paper["title"])}",'
-            '"{listToString(paper["date"])}",'
-            '"{listToStrong(paper["email"])}",'
-            '"{listToStrong(paper["url"])}"'
+            f'{listToString(paper["title"])},'
+            f'{listToString(paper["date"])},'
+            f'{listToString(paper["email"])},'
+            f'{paper["url"]}'
             )
         for key, value in paper.items():
             if isinstance(value, dict):
