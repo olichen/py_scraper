@@ -9,20 +9,24 @@ import html
 input_file = sys.argv[1]
 output_file = sys.argv[2]
 
-with open(input_file) as jfile:
-    data = json.load(jfile)
-    with open(output_file, 'w') as outfile:
-        for paper in data:
-            title = f'"{paper["title"]}","{paper["date"]}","{paper["url"]}"'
-            for key, value in paper.items():
+with open(input_file) as infile, open(output_file, 'w') as outfile:
+    data = json.load(infile)
 
-                def listToString(l):
-                    nohtmllist = list(map(html.unescape,l))
-                    return f'"{"; ".join(nohtmllist)}"'
+    def listToString(l):
+        nohtmllist = list(map(html.unescape,l))
+        return f'"{"; ".join(nohtmllist)}"'
 
-                if isinstance(value, dict):
-                    name = listToString(value['name'])
-                    affil = listToString(value['affiliation'])
-                    email = listToString(value['email'])
-                    outstring = f'{title},{name},{affil},{email}\n'
-                    outfile.write(outstring)
+    for paper in data:
+        title = (
+            f'"{listToString(paper["title"])}",'
+            '"{listToString(paper["date"])}",'
+            '"{listToStrong(paper["email"])}",'
+            '"{listToStrong(paper["url"])}"'
+            )
+        for key, value in paper.items():
+            if isinstance(value, dict):
+                name = listToString(value['name'])
+                affil = listToString(value['affiliation'])
+                email = listToString(value['email'])
+                outstring = f'{title},{name},{affil},{email}\n'
+                outfile.write(outstring)

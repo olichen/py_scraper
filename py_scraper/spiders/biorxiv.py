@@ -7,8 +7,7 @@ class BiorxivSpider(scrapy.Spider):
 
     def start_requests(self):
         url = 'https://www.biorxiv.org/search/'
-        search = getattr(self, 'search', None)
-        if search:
+        if search := getattr(self, 'search', None):
             url = url + search
         else:
             raise Exception('Please define a search term.')
@@ -22,13 +21,20 @@ class BiorxivSpider(scrapy.Spider):
         yield from response.follow_all(next_page_link, self.parse)
 
     def parse_paper(self, response):
+        def extractmeta(query):
+            query = f"//meta[@name='{query}']/@content"
+            output = response.xpath(query).getall()
+            return list(map(str.strip, output))
+
         output = {
-            'title': response.xpath("//meta[@name='DC.Title']/@content").get().strip(),
-            'date': response.xpath("//meta[@name='DC.Date']/@content").get().strip(),
+            'title': extractmeta('DC.Title'),
+            'date': extractmeta('DC.Date'),
+            'email': extractmeta('DC.Email'),
             'url': response.request.url,
         }
 
-        authors = response.xpath("//div[contains(concat(' ', @class, ' '), ' author-tooltip-name ')]/..")
+        query = "//div[contains(@class, 'author-tooltip-name')]/.."
+        authors = response.xpath(query)
         for i, author in enumerate(authors, 1):
             def extract(query):
                 output = author.css(query).getall()
@@ -37,6 +43,6 @@ class BiorxivSpider(scrapy.Spider):
             output[i] = {
                 'name': extract('div.author-tooltip-name::text'),
                 'affiliation': extract('div.author-affiliation'),
-                'email': extract('li.author-corresp-email-link > span > a::text'),
+                'email': extract('li.author-corresp-email-link>span>a::text'),
             }
         yield output
